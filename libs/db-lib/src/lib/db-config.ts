@@ -10,7 +10,7 @@ export const getDatabaseConfig = async (
 ): Promise<TypeOrmModuleOptions> => {
   return {
     type: 'postgres',
-    host: 'localhost',
+    host: 'limpiar_postgres',
     port: +configService.get<number>('POSTGRES_PORT'),
     username: configService.get('POSTGRES_USER'),
     password: configService.get('POSTGRES_PASSWORD'),
