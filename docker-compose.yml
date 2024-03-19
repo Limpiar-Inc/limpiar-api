@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  limpiar_postgres:
+    image: postgres:15
+    env_file:
+      - ./config/env/.env
+    ports:
+      - '5433:5432'
+    volumes:
+      - limpiar-data:/var/lib/postgresql/data
+
+  # limpiar_app:
+  #   build:
+  #     context: .
+  #     dockerfile: ./DockerFile
+  #   # command: |
+  #   #   npm run start:dev --watch
+
+  #   ports:
+  #     - 9229:9229
+  #     - 3000:3000
+  #   depends_on:
+  #     - limpiar_postgres
+  #   volumes:
+  #     - .:/usr/src/limpiar_app
+  #     - /usr/src/limpiar_app/node_modules
+
+volumes:
+  redis_data:
+  limpiar-data:
