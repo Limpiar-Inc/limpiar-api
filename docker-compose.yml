@@ -10,21 +10,21 @@ services:
     volumes:
       - limpiar-data:/var/lib/postgresql/data
 
-  # limpiar_app:
-  #   build:
-  #     context: .
-  #     dockerfile: ./DockerFile
-  #   # command: |
-  #   #   npm run start:dev --watch
+  limpiar_app:
+    build:
+      context: .
+      dockerfile: ./DockerFile
+    command: |
+      npm run start:dev --watch
 
-  #   ports:
-  #     - 9229:9229
-  #     - 3000:3000
-  #   depends_on:
-  #     - limpiar_postgres
-  #   volumes:
-  #     - .:/usr/src/limpiar_app
-  #     - /usr/src/limpiar_app/node_modules
+    ports:
+      - 9229:9229
+      - 3000:3000
+    depends_on:
+      - limpiar_postgres
+    volumes:
+      - .:/usr/src/limpiar_app
+      - /usr/src/limpiar_app/node_modules
 
 volumes:
   redis_data:
