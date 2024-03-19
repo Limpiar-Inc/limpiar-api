@@ -160,7 +160,7 @@ export class AuthLibService {
     } catch (err) {
       console.log(err);
       console.log(err.response.data);
-      throw new BadRequestException(err.response.data);
+      throw new BadRequestException(err);
     }
   }
 }
