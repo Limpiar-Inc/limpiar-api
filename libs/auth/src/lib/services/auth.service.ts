@@ -71,7 +71,7 @@ export class AuthLibService {
       await this.otpRepository.otpEntity.delete({ email: mail });
 
       const otp = this.cryptoService.generateOtpCode();
-
+      await this.otpRepository.create({ otp: otp.toString(), email: mail });
       await this.mailService.sendMeil(mail, '', otp.toString());
       return { succses: true, data: { message: 'otp sent to mail' } };
     } catch (err) {
