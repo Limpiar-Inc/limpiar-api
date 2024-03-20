@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class ValidateOtpDto {
   @ApiProperty()
@@ -9,6 +9,6 @@ export class ValidateOtpDto {
 
   @ApiProperty()
   @IsNotEmpty()
-  @IsNumber()
+  @IsString()
   newPassword: string;
 }
