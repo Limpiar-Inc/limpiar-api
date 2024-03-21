@@ -14,7 +14,10 @@ export class OrdersController {
   ) {}
   @Post()
   @UseGuards(AccessTokenGuard)
-  public createOrder(@Body() data: any, @CurrentUser() user: UsersEntity) {
+  public createOrder(
+    @Body() data: CreateOrderDto,
+    @CurrentUser() user: UsersEntity,
+  ) {
     return this.ordersLibService.createOrder(user, data);
   }
 
