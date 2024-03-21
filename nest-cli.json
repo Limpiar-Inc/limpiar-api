@@ -42,6 +42,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/orders-lib/tsconfig.lib.json"
       }
+    },
+    "payments-lib": {
+      "type": "library",
+      "root": "libs/payments-lib",
+      "entryFile": "index",
+      "sourceRoot": "libs/payments-lib/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/payments-lib/tsconfig.lib.json"
+      }
     }
   }
 }

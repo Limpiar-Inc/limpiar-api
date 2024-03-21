@@ -42,7 +42,7 @@ export class AuthLibService {
   public async login(login: SigninDto) {
     try {
       const userExsists = await this.usersRepository.usersEntity.findOne({
-        where: { email: login.email },
+        where: [{ email: login.email }, { userName: login.email }],
       });
       if (!userExsists) {
         throw new BadRequestException('user doesnot exsists');

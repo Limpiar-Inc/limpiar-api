@@ -6,6 +6,7 @@ import { UtilsModule } from 'libs/utils/src';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { OrdersModule } from './orders/orders.module';
+import { PaymentsModule } from './payments/payments.module';
 
 @Module({
   imports: [
@@ -21,6 +22,8 @@ import { OrdersModule } from './orders/orders.module';
     AuthModule,
 
     OrdersModule,
+
+    PaymentsModule,
   ],
   // providers: [AppService],
 })

@@ -40,7 +40,8 @@
     "passport-local": "^1.0.0",
     "pg": "^8.11.3",
     "reflect-metadata": "^0.2.0",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "square": "^35.1.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
@@ -89,7 +90,8 @@
     "moduleNameMapper": {
       "^@app/auth(|/.*)$": "<rootDir>/libs/auth/src/$1",
       "^@app/db-lib(|/.*)$": "<rootDir>/libs/db-lib/src/$1",
-      "^@app/orders-lib(|/.*)$": "<rootDir>/libs/orders-lib/src/$1"
+      "^@app/orders-lib(|/.*)$": "<rootDir>/libs/orders-lib/src/$1",
+      "^@app/payments-lib(|/.*)$": "<rootDir>/libs/payments-lib/src/$1"
     }
   }
 }

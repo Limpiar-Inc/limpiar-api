@@ -10,18 +10,42 @@ export class WoocomerseService {
     this.token = this.configService.get<string>('WOOCOMERSE_TOKEN');
   }
 
-  public async getRequest(url: string, parameters?: string) {
-    let config = {
-      method: 'get',
-      maxBodyLength: Infinity,
-      url: `https://limpiar.online/wp-json/wc/v3/${url}/${parameters}`,
-      headers: {
-        Authorization: this.token,
-      },
-    };
+  public async putRequest(url: string, body?: any, parametrs?: string) {
+    console.log(url, parametrs);
+    try {
+      let data = JSON.stringify(body);
+      let config = {
+        method: 'put',
+        // maxBodyLength: Infinity,
+        url: `https://limpiar.online/wp-json/wc/v3/${url}/${parametrs}`,
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: this.token,
+        },
+        data: data,
+      };
 
-    const data = await axios.request(config);
-    return data;
+      return await axios.request(config);
+    } catch (err) {
+      throw new BadRequestException(err.response.data);
+    }
+  }
+  public async getRequest(url: string, parameters?: string) {
+    try {
+      let config = {
+        method: 'get',
+        maxBodyLength: Infinity,
+        url: `https://limpiar.online/wp-json/wc/v3/${url}/${parameters}`,
+        headers: {
+          Authorization: this.token,
+        },
+      };
+
+      const data = await axios.request(config);
+      return data;
+    } catch (err) {
+      throw new BadRequestException(err.response.data);
+    }
   }
   public async postRequst(url: string, body: object) {
     try {

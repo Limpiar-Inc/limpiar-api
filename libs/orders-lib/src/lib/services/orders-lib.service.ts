@@ -11,7 +11,7 @@ import { StatusEnums } from '../enums';
 @Injectable()
 export class OrdersLibService {
   constructor(
-    @Inject(ORDERS_REPOSITORY) private readonly ordersRepo: OrdersRepository,
+    @Inject(ORDERS_REPOSITORY) public readonly ordersRepo: OrdersRepository,
     @Inject(WOOCOMERCE_SERVICE)
     private readonly woocomereceService: WoocomerseService,
   ) {}
@@ -38,6 +38,15 @@ export class OrdersLibService {
     }
   }
 
+  public async getOrderByWoocomerce(woocId: number) {
+    try {
+      return await this.ordersRepo.OrdersEntity.findOne({
+        where: { woocomerceId: woocId },
+      });
+    } catch (err) {
+      throw err;
+    }
+  }
   public async getMyOrders(currentUser: UsersEntity) {
     try {
       const myOrders = await this.ordersRepo.OrdersEntity.find({

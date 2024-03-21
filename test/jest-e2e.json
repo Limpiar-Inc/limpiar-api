@@ -18,6 +18,8 @@
     "@app/orders/(.*)": "<rootDir>/../libs/orders/src/$1",
     "@app/orders": "<rootDir>/../libs/orders/src",
     "@app/orders-lib/(.*)": "<rootDir>/../libs/orders-lib/src/$1",
-    "@app/orders-lib": "<rootDir>/../libs/orders-lib/src"
+    "@app/orders-lib": "<rootDir>/../libs/orders-lib/src",
+    "@app/payments-lib/(.*)": "<rootDir>/../libs/payments-lib/src/$1",
+    "@app/payments-lib": "<rootDir>/../libs/payments-lib/src"
   }
 }

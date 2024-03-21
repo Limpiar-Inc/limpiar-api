@@ -41,6 +41,12 @@
       ],
       "@app/orders-lib/*": [
         "libs/orders-lib/src/*"
+      ],
+      "@app/payments-lib": [
+        "libs/payments-lib/src"
+      ],
+      "@app/payments-lib/*": [
+        "libs/payments-lib/src/*"
       ]
     }
   }
