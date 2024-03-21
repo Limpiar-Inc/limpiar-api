@@ -4,9 +4,14 @@ import { DbLibModule } from '@app/db-lib';
 import { ConfigModule } from '@nestjs/config';
 import { UtilsModule } from 'libs/utils/src';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { JwtModule } from '@nestjs/jwt';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
+    JwtModule.register({
+      global: true,
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: `${process.cwd()}/config/env/.env`,
@@ -14,6 +19,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     DbLibModule,
 
     AuthModule,
+
+    OrdersModule,
   ],
   // providers: [AppService],
 })

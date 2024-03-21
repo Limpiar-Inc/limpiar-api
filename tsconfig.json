@@ -29,6 +29,18 @@
       ],
       "@app/db-lib/*": [
         "libs/db-lib/src/*"
+      ],
+      "@app/orders": [
+        "libs/orders/src"
+      ],
+      "@app/orders/*": [
+        "libs/orders/src/*"
+      ],
+      "@app/orders-lib": [
+        "libs/orders-lib/src"
+      ],
+      "@app/orders-lib/*": [
+        "libs/orders-lib/src/*"
       ]
     }
   }

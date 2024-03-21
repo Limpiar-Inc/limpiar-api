@@ -31,6 +31,14 @@ export class AuthLibService {
     private readonly woocomerseService: WoocomerseService,
   ) {}
 
+  public async validateUserById(id: number) {
+    try {
+      return await this.usersRepository.findOne(id);
+    } catch (err) {
+      throw err;
+    }
+  }
+
   public async login(login: SigninDto) {
     try {
       const userExsists = await this.usersRepository.usersEntity.findOne({

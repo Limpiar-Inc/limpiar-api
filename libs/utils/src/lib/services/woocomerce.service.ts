@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { stringify } from 'flatted';
 const axios = require('axios');
 
 @Injectable()
@@ -24,11 +25,11 @@ export class WoocomerseService {
   }
   public async postRequst(url: string, body: object) {
     try {
-      let data = body;
-
+      // let data = stringify(body);
+      let data = JSON.stringify(body);
       let config = {
         method: 'post',
-        maxBodyLength: Infinity,
+        // maxBodyLength: Infinity,
         url: `https://limpiar.online/wp-json/wc/v3/${url}`,
         headers: {
           'Content-Type': 'application/json',

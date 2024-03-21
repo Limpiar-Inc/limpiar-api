@@ -24,6 +24,24 @@
       "compilerOptions": {
         "tsConfigPath": "libs/db-lib/tsconfig.lib.json"
       }
+    },
+    "orders": {
+      "type": "library",
+      "root": "libs/orders",
+      "entryFile": "index",
+      "sourceRoot": "libs/orders/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/orders/tsconfig.lib.json"
+      }
+    },
+    "orders-lib": {
+      "type": "library",
+      "root": "libs/orders-lib",
+      "entryFile": "index",
+      "sourceRoot": "libs/orders-lib/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/orders-lib/tsconfig.lib.json"
+      }
     }
   }
 }

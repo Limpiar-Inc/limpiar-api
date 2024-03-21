@@ -1,0 +1,2 @@
+export const ORDER_LIB_SERVICE = Symbol('ORDER_LIB_SERVICE');
+export const ORDERS_REPOSITORY = Symbol('ORDERS_REPOSITORY');
