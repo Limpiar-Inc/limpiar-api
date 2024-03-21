@@ -6,7 +6,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from 'libs/common/decorators/current-user.decorator';
 import { AccessTokenGuard } from 'libs/common/guards/accses-token.guard';
 
-@ApiTags('Auth')
+@ApiTags('Payments')
 @Controller('payments')
 export class PaymentsController {
   constructor(private readonly paymentsService: PaymentsLibService) {}
