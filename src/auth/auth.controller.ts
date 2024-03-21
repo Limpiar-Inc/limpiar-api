@@ -16,7 +16,7 @@ import { IsNotEmpty } from 'class-validator';
 import { CurrentUser } from 'libs/common/decorators/current-user.decorator';
 import { AccessTokenGuard } from 'libs/common/guards/accses-token.guard';
 
-@ApiTags('auth')
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(

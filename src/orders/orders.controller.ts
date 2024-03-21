@@ -3,9 +3,11 @@ import { OrdersLibService } from '@app/orders-lib';
 import { ORDER_LIB_SERVICE } from '@app/orders-lib/lib/constants';
 import { CreateOrderDto } from '@app/orders-lib/lib/dtos/create-order.dto';
 import { Body, Controller, Get, Inject, Post, UseGuards } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from 'libs/common/decorators/current-user.decorator';
 import { AccessTokenGuard } from 'libs/common/guards/accses-token.guard';
 
+@ApiTags('Orders')
 @Controller('orders')
 export class OrdersController {
   constructor(

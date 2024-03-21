@@ -9,9 +9,11 @@ export class CraetePaymentDto {
 
   @IsNotEmpty()
   @IsString()
+  @ApiProperty()
   sourceId: string;
 
   @IsNotEmpty()
   @IsNumber()
+  @ApiProperty()
   orderId: number;
 }
