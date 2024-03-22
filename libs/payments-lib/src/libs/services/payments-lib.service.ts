@@ -14,6 +14,7 @@ import { UsersEntity } from '@app/auth/lib/entities';
 import { StatusEnums } from '@app/orders-lib/lib/enums';
 import { WOOCOMERCE_SERVICE } from 'libs/utils/src/lib/constants';
 import { WoocomerseService } from 'libs/utils/src/lib/services/woocomerce.service';
+import { ConfigService } from '@nestjs/config';
 const { Client, Environment } = require('square');
 // import { Client } from 'square';
 
@@ -24,13 +25,19 @@ const client = new Client({
 });
 @Injectable()
 export class PaymentsLibService {
+  private client;
   constructor(
     @Inject(ORDER_LIB_SERVICE) private readonly ordersService: OrdersLibService,
-
+    private configService: ConfigService,
     @Inject(AUTH_SERVICE) private readonly authService: AuthLibService,
     @Inject(WOOCOMERCE_SERVICE)
     private readonly woocomerceService: WoocomerseService,
-  ) {}
+  ) {
+    this.client = new Client({
+      environment: Environment.Sandbox, // Change to Environment.Production for live transactions
+      accessToken: this.configService.get<string>('SQUARE_TOKEN'),
+    });
+  }
   public async processRequest(data: CraetePaymentDto, user: UsersEntity) {
     try {
       const order = await this.ordersService.getOrderByWoocomerce(data.orderId);
@@ -41,16 +48,14 @@ export class PaymentsLibService {
       if (order.status == StatusEnums.PAID) {
         throw new BadRequestException('payment is already paid');
       }
-      console.log(order, 'order');
       const woocomerceOrder = await this.woocomerceService.getRequest(
         'orders',
         data.orderId.toString(),
       );
-      console.log(woocomerceOrder, 'order');
-      const paymentsApi = client.paymentsApi;
+      const paymentsApi = this.client.paymentsApi;
 
       const request = {
-        sourceId: data.sourceId,
+        sourceId: 'cnon:card-nonce-ok',
         amountMoney: {
           amount: data.amount,
           currency: 'USD',
@@ -80,9 +85,7 @@ export class PaymentsLibService {
 
       return { message: 'succses', data: obj };
     } catch (e) {
-      console.log(
-        `[Error] Status:${e.statusCode}, Messages: ${JSON.stringify(e.errors, null, 2)}`,
-      );
+      console.log(e, 'error');
 
       if (e.errors) {
         this.sendErrorMessage(e.errors);
