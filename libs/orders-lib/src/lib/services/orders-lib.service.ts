@@ -72,19 +72,19 @@ export class OrdersLibService {
           data: { orders: [] },
         };
       }
-      const orders = await Promise.all(
-        myOrders.map(async (order) => {
-          const data = await this.woocomereceService.getRequest(
-            'orders',
-            order.woocomerceId.toString(),
-          );
-          return data.data;
-        }),
+
+      const ids = myOrders.map((data) => data.woocomerceId);
+
+      const query = 'include=' + ids.join(',');
+
+      const data = await this.woocomereceService.getRequestQuery(
+        'orders',
+        query,
       );
 
       return {
         succses: true,
-        data: { orders: orders },
+        data: { orders: data.data },
       };
     } catch (err) {
       throw new BadRequestException(err);

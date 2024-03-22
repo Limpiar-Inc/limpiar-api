@@ -30,6 +30,24 @@ export class WoocomerseService {
       throw new BadRequestException(err.response.data);
     }
   }
+
+  public async getRequestQuery(url: string, query: string) {
+    try {
+      let config = {
+        method: 'get',
+        maxBodyLength: Infinity,
+        url: `https://limpiar.online/wp-json/wc/v3/${url}?${query}`,
+        headers: {
+          Authorization: this.token,
+        },
+      };
+
+      const data = await axios.request(config);
+      return data;
+    } catch (err) {
+      throw new BadRequestException(err.response.data);
+    }
+  }
   public async getRequest(url: string, parameters?: string) {
     try {
       let config = {
