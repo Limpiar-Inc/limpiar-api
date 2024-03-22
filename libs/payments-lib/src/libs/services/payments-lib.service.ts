@@ -16,13 +16,7 @@ import { WOOCOMERCE_SERVICE } from 'libs/utils/src/lib/constants';
 import { WoocomerseService } from 'libs/utils/src/lib/services/woocomerce.service';
 import { ConfigService } from '@nestjs/config';
 const { Client, Environment } = require('square');
-// import { Client } from 'square';
 
-const client = new Client({
-  environment: Environment.Sandbox, // Change to Environment.Production for live transactions
-  accessToken:
-    'EAAAl6gGwGS20DnJDFIkkCBVCbBO5vOjULDHZHBU_1DrXGv4rYEoduCMtMGkTkSB', // Replace with your actual access token
-});
 @Injectable()
 export class PaymentsLibService {
   private client;
@@ -60,7 +54,7 @@ export class PaymentsLibService {
       const paymentsApi = this.client.paymentsApi;
 
       const request = {
-        sourceId: 'cnon:card-nonce-ok',
+        sourceId: data.sourceId,
         amountMoney: {
           amount: order.amount,
           currency: 'USD',
