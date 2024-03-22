@@ -40,6 +40,7 @@ export class PaymentsLibService {
   }
   public async processRequest(data: CraetePaymentDto, user: UsersEntity) {
     try {
+      console.log(data);
       const order = await this.ordersService.getOrderByWoocomerce(data.orderId);
 
       if (!order) {
@@ -48,16 +49,20 @@ export class PaymentsLibService {
       if (order.status == StatusEnums.PAID) {
         throw new BadRequestException('payment is already paid');
       }
-      const woocomerceOrder = await this.woocomerceService.getRequest(
-        'orders',
-        data.orderId.toString(),
-      );
+
+      // console.log(data.amount * 100, 'ddd', order.amount);
+      if (data.amount * 100 !== order.amount) {
+        throw new BadRequestException(
+          `Order price and given price are different.  order price:${order.amount / 100}, given price ${data.amount}`,
+        );
+      }
+
       const paymentsApi = this.client.paymentsApi;
 
       const request = {
         sourceId: 'cnon:card-nonce-ok',
         amountMoney: {
-          amount: data.amount,
+          amount: order.amount,
           currency: 'USD',
           autoComplete: true,
         },

@@ -124,6 +124,7 @@ class LineItemDto {
   name: string;
 
   @IsString()
+  @IsNotEmpty()
   @ApiProperty()
   total: string;
 

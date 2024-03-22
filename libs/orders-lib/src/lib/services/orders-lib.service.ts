@@ -16,14 +16,27 @@ export class OrdersLibService {
     private readonly woocomereceService: WoocomerseService,
   ) {}
 
-  public async createOrder(currentUser: UsersEntity, orderDto: any) {
+  public async createOrder(currentUser: UsersEntity, orderDto: CreateOrderDto) {
     try {
       const orderCreatedInWoocomerce = await this.woocomereceService.postRequst(
         'orders',
         orderDto,
       );
+      let totalSum = 0;
+
+      orderDto.line_items.forEach((item) => {
+        // Extracting the numerical value from the total string, rounding to the nearest cent, and converting to cents
+        const totalCents = Math.round(
+          parseFloat(item.total.replace('$', '')) * 100,
+        );
+
+        // Adding the total in cents to the sum
+        totalSum += totalCents;
+      });
+
       const orderForDb = this.ordersRepo.OrdersEntity.create({
         status: StatusEnums.PENDING,
+        amount: totalSum,
         woocomerceId: orderCreatedInWoocomerce.data.id,
         user: currentUser,
       });

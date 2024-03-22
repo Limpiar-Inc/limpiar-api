@@ -11,6 +11,9 @@ export class OrdersEntity extends BaseEntity {
   @Column({ name: 'woocomerse_id', type: 'int', unique: true, nullable: false })
   woocomerceId: number;
 
+  @Column({ name: 'amount', type: 'float', nullable: true })
+  amount: number;
+
   @ManyToOne(() => UsersEntity, (user) => user.id, {
     nullable: false,
   })
