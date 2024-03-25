@@ -11,6 +11,7 @@ async function bootstrap() {
   const httpsOptions = {
     key: fs.readFileSync('./server.key'),
     cert: fs.readFileSync('./limpiar.crt'),
+    ca: fs.readFileSync('./bundle.ca-bundle'),
   };
 
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
