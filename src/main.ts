@@ -9,10 +9,6 @@ import * as fs from 'fs';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     cors: true,
-    httpsOptions: {
-      key: fs.readFileSync('./server.key'),
-      cert: fs.readFileSync('./limpiar.crt'),
-    },
   });
 
   app.enableCors();
