@@ -7,10 +7,14 @@ import { join } from 'path';
 import * as fs from 'fs';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-    cors: true,
-  });
+  const httpsOptions = {
+    key: fs.readFileSync('./limpiar-hop.key'),
+    cert: fs.readFileSync('./limpiar-shop.cert'),
+  };
 
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    httpsOptions,
+  });
   app.enableCors();
 
   app.useStaticAssets(join(__dirname, '..', 'public'));
