@@ -9,7 +9,7 @@ import * as fs from 'fs';
 async function bootstrap() {
   const httpsOptions = {
     key: fs.readFileSync('./limpiar-shop.key'),
-    cert: fs.readFileSync('./limpiar-shop.cert'),
+    cert: fs.readFileSync('./limpiar-shop.crt'),
   };
 
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
