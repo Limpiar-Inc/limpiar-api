@@ -51,7 +51,6 @@ export class PaymentsLibService {
   }
   public async processRequest(data: CraetePaymentDto, user: UsersEntity) {
     try {
-      console.log(data);
       const order = await this.ordersService.getOrderByWoocomerce(data.orderId);
 
       if (!order) {
@@ -60,7 +59,9 @@ export class PaymentsLibService {
       if (order.status == StatusEnums.PAID) {
         throw new BadRequestException('payment is already paid');
       }
+      console.log(user, 'user');
 
+      console.log(order, 'order');
       if (order.user.id !== user.id) {
         throw new BadRequestException(
           `Order ${order.id} doesnot belong to user ${user.id}`,
