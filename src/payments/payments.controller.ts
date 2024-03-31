@@ -33,6 +33,7 @@ export class PaymentsController {
   @Get()
   @Render('index')
   public async root(@Query() data: QueryDto) {
+    await this.paymentsService.checkIfPaymentIsValid(data);
     return { amount: data.amount, order: data.orderId, access: data.access };
   }
 }
