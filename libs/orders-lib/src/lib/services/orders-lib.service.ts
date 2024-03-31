@@ -55,6 +55,7 @@ export class OrdersLibService {
     try {
       return await this.ordersRepo.OrdersEntity.findOne({
         where: { woocomerceId: woocId },
+        relations: { user: true },
       });
     } catch (err) {
       throw err;

@@ -34,7 +34,7 @@ export class PaymentsLibService {
     });
   }
 
-  public async checkIfPaymentIsValid(data:QueryDto){
+  public async checkIfPaymentIsValid(data: QueryDto) {
     const order = await this.ordersService.getOrderByWoocomerce(data.orderId);
     if (!order) {
       throw new BadRequestException('order doesnot exsists');
@@ -59,6 +59,12 @@ export class PaymentsLibService {
       }
       if (order.status == StatusEnums.PAID) {
         throw new BadRequestException('payment is already paid');
+      }
+
+      if (order.user.id !== user.id) {
+        throw new BadRequestException(
+          `Order ${order.id} doesnot belong to user ${user.id}`,
+        );
       }
 
       // console.log(data.amount * 100, 'ddd', order.amount);
