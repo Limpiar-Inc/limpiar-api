@@ -15,6 +15,7 @@ import { StatusEnums } from '@app/orders-lib/lib/enums';
 import { WOOCOMERCE_SERVICE } from 'libs/utils/src/lib/constants';
 import { WoocomerseService } from 'libs/utils/src/lib/services/woocomerce.service';
 import { ConfigService } from '@nestjs/config';
+import { QueryDto } from '../dtos/query.dto';
 const { Client, Environment } = require('square');
 
 @Injectable()
@@ -31,6 +32,22 @@ export class PaymentsLibService {
       environment: Environment.Sandbox, // Change to Environment.Production for live transactions
       accessToken: this.configService.get<string>('SQUARE_TOKEN'),
     });
+  }
+
+  public async checkIfPaymentIsValid(data:QueryDto){
+    const order = await this.ordersService.getOrderByWoocomerce(data.orderId);
+    if (!order) {
+      throw new BadRequestException('order doesnot exsists');
+    }
+    if (order.status == StatusEnums.PAID) {
+      throw new BadRequestException('payment is already paid');
+    }
+
+    if (data.amount * 100 !== order.amount) {
+      throw new BadRequestException(
+        `Order price and given price are different.  order price:${order.amount / 100}, given price ${data.amount}`,
+      );
+    }
   }
   public async processRequest(data: CraetePaymentDto, user: UsersEntity) {
     try {

@@ -1,60 +1,213 @@
+<!doctype html>
 <html>
   <head>
-    <meta name='viewport' content='width=device-width, initial-scale=1' />
-    <link href='../public/app.css' rel='stylesheet' />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="/app.css" rel="stylesheet" />
     <script
-      type='text/javascript'
-      src='https://sandbox.web.squarecdn.com/v1/square.js'
+      type="text/javascript"
+      src="https://sandbox.web.squarecdn.com/v1/square.js"
     ></script>
-    <script>
-      const appId = 'sandbox-sq0idb-B1HfHM5D--71-nBqjSJmvA'; const locationId =
-      'L7BAP8Q4DV3RK'; function buildPaymentRequest(payments) { const
-      paymentRequest = payments.paymentRequest({ countryCode: 'US',
-      currencyCode: 'USD', total: { amount: '1.00', label: 'Total', }, });
-      return paymentRequest; } async function initializeCashApp(payments) {
-      const paymentRequest = buildPaymentRequest(payments); const cashAppPay =
-      await payments.cashAppPay(paymentRequest, { redirectURL:
-      window.location.href, referenceId: 'my-website-00000001', }); const
-      buttonOptions = { shape: 'semiround', width: 'full', }; await
-      cashAppPay.attach('#cash-app-pay', buttonOptions); return cashAppPay; }
-      async function createPayment(token) { const body = JSON.stringify({
-      locationId, sourceId: token, idempotencyKey: window.crypto.randomUUID(),
-      }); const paymentResponse = await fetch('/payments', { method: 'POST',
-      headers: { 'Content-Type': 'application/json', }, body, }); if
-      (paymentResponse.ok) { return paymentResponse.json(); } const errorBody =
-      await paymentResponse.text(); throw new Error(errorBody); } function
-      displayPaymentResults(status) { const statusContainer =
-      document.getElementById( 'payment-status-container', ); if (status ===
-      'SUCCESS') { statusContainer.classList.remove('is-failure');
-      statusContainer.classList.add('is-success'); } else {
-      statusContainer.classList.remove('is-success');
-      statusContainer.classList.add('is-failure'); }
-      statusContainer.style.visibility = 'visible'; }
-      document.addEventListener('DOMContentLoaded', async function () { if
-      (!window.Square) { throw new Error('Square.js failed to load properly'); }
-      let payments; try { payments = window.Square.payments(appId, locationId);
-      } catch (err) { console.log(err); const statusContainer =
-      document.getElementById( 'payment-status-container', );
-      statusContainer.className = 'missing-credentials';
-      statusContainer.style.visibility = 'visible'; return; } let cashAppPay;
-      try { cashAppPay = await initializeCashApp(payments); } catch (e) {
-      console.error('Initializing Cash App Pay failed', e); } if (cashAppPay) {
-      cashAppPay.addEventListener( 'ontokenization', async function ({ detail })
-      { const tokenResult = detail.tokenResult; if (tokenResult.status === 'OK')
-      { const paymentResults = await createPayment(tokenResult.token);
-      displayPaymentResults('SUCCESS'); console.debug('Payment Success',
-      paymentResults); } else { let errorMessage = `Tokenization failed with
-      status: ${tokenResult.status}`; if (tokenResult.errors) { errorMessage +=
-      ` and errors: ${JSON.stringify( tokenResult.errors, )}`; }
-      displayPaymentResults('FAILURE'); throw new Error(errorMessage); } }, ); }
-      });
-    </script>
+
+     <style>
+    .spinner {
+      display: none;
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      border-left-color: #09f;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
   </head>
   <body>
-    <form id='payment-form'>
-      <h2>Pay $1.00</h2>
-      <div id='cash-app-pay'></div>
+    <form id="payment-form">
+      <h2>Pay {{amount}}$<span id="pay-amount"></span></h2>
+      <div id="cash-app-pay"></div>
     </form>
-    <div id='payment-status-container'></div>
+    <div id="payment-status-container"></div>
+    <div class="spinner" id="spinner"></div>
+
   </body>
+  <script>
+
+      function toggleSpinner(show) {
+        const spinner = document.getElementById('spinner');
+        if (show) {
+      spinner.style.display = 'block';
+       } else {
+          spinner.style.display = 'none';
+      }
+  }
+    const appId = 'sandbox-sq0idb-B1HfHM5D--71-nBqjSJmvA';
+    const locationId = 'L7BAP8Q4DV3RK';
+
+ 
+    let orderId = "{{order}}";
+    let price = "{{amount}}";
+    console.log(price,'priceeeeee')
+
+    const access = '{{access}}'
+    {{!-- console.log(orderId); // Example: "1.00" --}}
+
+    function buildPaymentRequest(payments) {
+      const paymentRequest = payments.paymentRequest({
+        countryCode: 'US',
+        currencyCode: 'USD',
+        total: {
+          amount: price || '1.00', // Use the extracted price or fallback to a default value
+          label: 'Total',
+        },
+      });
+      return paymentRequest;
+    }
+
+    async function initializeCashApp(payments) {
+      const paymentRequest = buildPaymentRequest(payments);
+      const cashAppPay = await payments.cashAppPay(paymentRequest, {
+        redirectURL: window.location.href,
+        referenceId: 'my-website-00000001',
+      });
+      const buttonOptions = {
+        shape: 'semiround',
+        width: 'full',
+      };
+      await cashAppPay.attach('#cash-app-pay', buttonOptions);
+      return cashAppPay;
+    }
+
+    async function createPayment(token) {
+      try{
+        toggleSpinner(true)
+         const body = JSON.stringify({
+        locationId,
+        sourceId: token,
+        orderId: parseInt(orderId),
+        amount: parseFloat(price),
+        idempotencyKey: window.crypto.randomUUID(),
+      });
+
+      const myHeaders = new Headers();
+      myHeaders.append('Content-Type', 'application/json');
+      myHeaders.append('Authorization', `Bearer ${access}`);
+
+      console.log(token);
+
+      const requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: body,
+        redirect: 'follow',
+      };
+
+      
+      const paymentResponse = await fetch(
+        'https://limpiar.shop:3000/payments',
+        requestOptions,
+      );
+      if (paymentResponse.ok) {
+        
+        displayPaymentResults('SUCCESS');
+
+        return paymentResponse.json();
+      }
+
+      const errorBody = await paymentResponse.text();
+      throw new Error(errorBody);
+      }catch(err){
+        alert(err)
+      displayPaymentResults('FAILURE');
+
+        console.log(err)
+      }finally{
+        toggleSpinner(false)
+      }
+     
+    }
+
+    // status is either SUCCESS or FAILURE;
+    function displayPaymentResults(status) {
+      const statusContainer = document.getElementById(
+        'payment-status-container',
+      );
+      if (status === 'SUCCESS') {
+        statusContainer.classList.remove('is-failure');
+        statusContainer.classList.add('is-success');
+      } else {
+        statusContainer.classList.remove('is-success');
+        statusContainer.classList.add('is-failure');
+      }
+
+      statusContainer.style.visibility = 'visible';
+    }
+
+    document.addEventListener('DOMContentLoaded', async function () {
+      if (!window.Square) {
+        throw new Error('Square.js failed to load properly');
+      }
+
+      let payments;
+      try {
+        payments = window.Square.payments(appId, locationId);
+      } catch {
+        const statusContainer = document.getElementById(
+          'payment-status-container',
+        );
+        statusContainer.className = 'missing-credentials';
+        statusContainer.style.visibility = 'visible';
+        return;
+      }
+
+      let cashAppPay;
+      try {
+        cashAppPay = await initializeCashApp(payments);
+      } catch (e) {
+        console.error('Initializing Cash App Pay failed', e);
+      }
+      if (cashAppPay) {
+        cashAppPay.addEventListener(
+          'ontokenization',
+          async function ({ detail }) {
+            const tokenResult = detail.tokenResult;
+            if (tokenResult.status === 'OK') {
+                console.log(tokenResult.token,'xddddddddddd')
+              const paymentResults = await createPayment(tokenResult.token);
+
+              console.debug('Payment Success', paymentResults);
+            } else {
+              let errorMessage = `Tokenization failed with status: ${tokenResult.status}`;
+
+              if (tokenResult.errors) {
+                errorMessage += ` and errors: ${JSON.stringify(
+                  tokenResult.errors,
+                )}`;
+              }
+              throw new Error(errorMessage);
+            }
+          },
+        );
+      }
+
+      // Update payment amount displayed on the page
+      const paymentAmountElement = document.getElementById('payment-amount');
+      if (paymentAmountElement) {
+        paymentAmountElement.textContent = `$${price}`;
+      }
+    });
+  </script>
 </html>
+
+
